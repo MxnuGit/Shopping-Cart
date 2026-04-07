@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,15 +15,25 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        val itemList = ArrayList<String>()
+
         val editTxt = findViewById<EditText>(R.id.editTxt);
         val userBtn =  findViewById<Button>(R.id.addBtn);
-        val itemList = ArrayList<String>()
+        val RecyclerView = findViewById<RecyclerView>(R.id.list)
+        val adapter = ItemAdapter(itemList)
+
+        RecyclerView.adapter = adapter
+        RecyclerView.layoutManager = LinearLayoutManager(this)
+
 
         userBtn.setOnClickListener {
             val text = editTxt.text.toString();
-            itemList.add(text)
-            Log.d("item", "$itemList")
-            editTxt.setText("")
+
+            if(!text.isEmpty()) {
+                itemList.add(text)
+                adapter.notifyDataSetChanged()
+                editTxt.setText("")
+            }
         }
     }
 }
